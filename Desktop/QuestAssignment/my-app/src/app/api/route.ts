@@ -40,18 +40,18 @@ export async function POST(request: Request){
         temperature: 1,
         stream:false
     }
-    // const response =  await fetch("https://api.openai.com/v1/chat/completions",{
-    //     method:"POST",
-    //     headers:{
-    //         'Content-Type':"application/json",
-    //         
-    //     },
-    //     body: JSON.stringify(payload)
+    const response =  await fetch("https://api.openai.com/v1/chat/completions",{
+        method:"POST",
+        headers:{
+            'Content-Type':"application/json",
+            
+        },
+        body: JSON.stringify(payload)
 
 
-    // })
+    })
     
-    // console.log(response.json())
+    console.log(response.json())
 
     return NextResponse.json(data)
 
