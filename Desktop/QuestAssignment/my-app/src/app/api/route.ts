@@ -1,62 +1,51 @@
-
-
-const {Configuration, OpenAIApi} = require("openai")
-
 import { NextResponse } from "next/server";
-
 import connectToDatabase from "@/helper/server-helper";
-
 const { PrismaClient } = require("@prisma/client");
-
 const prisma = new PrismaClient();
 
+export async function POST(request: Request) {
+  var data = await request.json();
 
+  const { userName, userBio } = data;
 
+  const prompt = `Recommend me the username and bio based on the given userName:${userName} and userBio:${userBio}  and provide the response in form of a json where two fields are userName and userBio`;
 
+  console.log(data);
 
+  const payload = {
+    model: "gpt-4-turbo",
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: 256,
+    temperature: 1,
+    stream: false,
+  };
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      
+    },
+    body: JSON.stringify(payload),
+  });
 
-export async function POST(request: Request){
-    var data = await request.json()
+  const dataAI = await response.json();
+  const content = dataAI.choices[0].message.content;
+  const first = content.indexOf("{");
+  const last = content.indexOf("}");
 
-    var userName = data.username
-    var userBio =  data.bio
-    var nameAI = "check"
-    var bioAI = "check"
+  const final = JSON.parse(dataAI.choices[0].message.content.slice(first, last + 1));
 
-    await connectToDatabase()
+  var nameAI = final.userName;
+  var bioAI = final.userBio;
+  console.log({ data: { userName, userBio, nameAI, bioAI } });
 
-    var newuser = await prisma.user.create({data:{userName,userBio,nameAI,bioAI}})
+  await connectToDatabase();
 
-    
+  var newuser = await prisma.user.create({
+    data: { userName, userBio, nameAI, bioAI },
+  });
 
-    const prompt = `Recommend me the username and bio based on the given ${data}`
+  console.log(newuser);
 
-    console.log(data)
-
-    var payload = {
-        model:"gpt-3.5-turbo",
-        prompt : prompt,
-        max_tokens:256,
-        temperature: 1,
-        stream:false
-    }
-    const response =  await fetch("https://api.openai.com/v1/chat/completions",{
-        method:"POST",
-        headers:{
-            'Content-Type':"application/json",
-            
-        },
-        body: JSON.stringify(payload)
-
-
-    })
-    
-    console.log(response.json())
-
-    return NextResponse.json(data)
-
-    
-
- 
+  return NextResponse.json(newuser);
 }
-
