@@ -59,6 +59,15 @@ export default function Home() {
     }
   }
 
+  const resetForm = () => {
+    form.reset({
+      userName: "",
+      userBio: ""
+    });
+    // Display a message after resetting the form
+    console.log("Form data cleared");
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -96,7 +105,10 @@ export default function Home() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-between">
+          <Button type="submit">Submit</Button>
+          <Button type="button" onClick={resetForm}>Reset</Button>
+        </div>
       </form>
     </Form>
   )
