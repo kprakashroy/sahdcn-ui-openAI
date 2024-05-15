@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/helper/server-helper";
-import { error } from "console";
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 

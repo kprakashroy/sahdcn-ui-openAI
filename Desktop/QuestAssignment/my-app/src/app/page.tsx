@@ -50,8 +50,8 @@ export default function Home() {
         console.log("Form data submitted successfully")
         var data = await response.json()
         console.log(data)
-        // form.setValue("userName", data.nameAI)
-        // form.setValue("userBio", data.bioAI)
+        form.setValue("userName", data.nameAI)
+        form.setValue("userBio", data.bioAI)
       } else {
         console.error("Failed to submit form data")
       }
@@ -65,7 +65,7 @@ export default function Home() {
       userName: "",
       userBio: ""
     });
-    // Display a message after resetting the form
+   
     console.log("Form data cleared");
   };
 
