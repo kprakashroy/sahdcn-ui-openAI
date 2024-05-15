@@ -1,9 +1,23 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/helper/server-helper";
+import { error } from "console";
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+
+import {rateLimitMiddleware} from "@/middleware/middlewareRateLimiting";
+
+
+
 export async function POST(request: Request) {
+
+    var check = await rateLimitMiddleware(request)
+    
+    if(check){
+        return NextResponse.json({error:1, msg:"rate limit exceeded"});
+    }
+    
+
   const data = await request.json();
 
   const { userName, userBio } = data;
@@ -23,7 +37,8 @@ export async function POST(request: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      
+      Authorization:
+        "Bearer sk-proj-x4B57pMQvueZq07GRZmYT3BlbkFJR2c3jH8pDy2emQiyhZRD",
     },
     body: JSON.stringify(payload),
   });
