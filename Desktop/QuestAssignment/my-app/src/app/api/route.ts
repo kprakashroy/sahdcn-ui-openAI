@@ -4,7 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
-  var data = await request.json();
+  const data = await request.json();
 
   const { userName, userBio } = data;
 
@@ -35,13 +35,13 @@ export async function POST(request: Request) {
 
   const final = JSON.parse(dataAI.choices[0].message.content.slice(first, last + 1));
 
-  var nameAI = final.userName;
-  var bioAI = final.userBio;
+  const nameAI = final.userName;
+  const bioAI = final.userBio;
   console.log({ data: { userName, userBio, nameAI, bioAI } });
 
   await connectToDatabase();
 
-  var newuser = await prisma.user.create({
+  const newuser = await prisma.user.create({
     data: { userName, userBio, nameAI, bioAI },
   });
 
