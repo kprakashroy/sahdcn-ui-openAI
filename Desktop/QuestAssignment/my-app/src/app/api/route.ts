@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     headers: {
       "Content-Type": "application/json",
       Authorization:
-        "Bearer sk-proj-x4B57pMQvueZq07GRZmYT3BlbkFJR2c3jH8pDy2emQiyhZRD",
+        "Bearer -----------------------api-key---------",
     },
     body: JSON.stringify(payload),
   });
