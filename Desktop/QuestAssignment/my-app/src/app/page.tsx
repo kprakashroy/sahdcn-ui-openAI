@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -27,6 +28,8 @@ const formSchema = z.object({
 
 export default function Home() {
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,6 +40,7 @@ export default function Home() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setErrorMessage("");
       const response = await fetch("/api", {
         method: "POST",
         headers: {
@@ -50,17 +54,26 @@ export default function Home() {
         console.log("Form data submitted successfully")
         var data = await response.json()
         console.log(data)
+
+        if(data['error'] = 1){
+          setErrorMessage(data.msg)
+        }
         form.setValue("userName", data.nameAI)
         form.setValue("userBio", data.bioAI)
       } else {
         console.error("Failed to submit form data")
+        setErrorMessage( "Failed to submit form data")
       }
     } catch (error) {
       console.error("Error occurred while submitting form data:", error)
+
+      setErrorMessage("Error occurred while submitting form data: " + error);
+
     }
   }
 
   const resetForm = () => {
+    setErrorMessage("");
     form.reset({
       userName: "",
       userBio: ""
@@ -82,7 +95,7 @@ export default function Home() {
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name.
+                This is your public display userName.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -99,7 +112,7 @@ export default function Home() {
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
               <FormDescription>
-                This is your public display name.
+                This is your public display Bio.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -110,6 +123,12 @@ export default function Home() {
           <Button type="submit">Submit</Button>
           <Button type="button" onClick={resetForm}>Reset</Button>
         </div>
+
+        {errorMessage && (
+          <div className="text-red-600 mt-2">
+            {errorMessage}
+          </div>
+        )}
       </form>
     </Form>
   )

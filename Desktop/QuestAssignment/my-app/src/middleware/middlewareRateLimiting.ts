@@ -1,6 +1,6 @@
 const requestCounts = new Map();
 const windowMs = 60000; 
-const maxRequests = 15; 
+const maxRequests = 2; 
 
 export async function rateLimitMiddleware(request:Request) {
   let ip = request['headers'].get("x-forwarded-for") || request['headers'].get("cf-connecting-ip") || request['headers'].get("cf-ipcountry") ;
