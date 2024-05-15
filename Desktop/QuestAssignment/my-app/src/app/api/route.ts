@@ -10,9 +10,9 @@ import {rateLimitMiddleware} from "@/middleware/middlewareRateLimiting";
 
 export async function POST(request: Request) {
 
-    var check = await rateLimitMiddleware(request)
+    var rate = await rateLimitMiddleware(request)
     
-    if(check){
+    if(rate){
         return NextResponse.json({error:1, msg:"rate limit exceeded"});
     }
     
@@ -21,9 +21,23 @@ export async function POST(request: Request) {
 
   const { userName, userBio } = data;
 
+  console.log(data);
+
+  const existingUser = await prisma.user.findFirst({
+    where: { userName: userName , userBio: userBio},
+  })
+
+  if(existingUser){
+
+  console.log(existingUser);
+
+  return NextResponse.json(existingUser);
+
+  }
+
   const prompt = `Recommend me the username and bio based on the given userName:${userName} and userBio:${userBio}  and provide the response in form of a json where two fields are userName and userBio`;
 
-  console.log(data);
+  
 
   const payload = {
     model: "gpt-4-turbo",
