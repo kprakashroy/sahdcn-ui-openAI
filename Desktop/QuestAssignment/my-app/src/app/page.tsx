@@ -57,6 +57,7 @@ export default function Home() {
 
         if(data['error'] = 1){
           setErrorMessage(data.msg)
+          return
         }
         form.setValue("userName", data.nameAI)
         form.setValue("userBio", data.bioAI)
