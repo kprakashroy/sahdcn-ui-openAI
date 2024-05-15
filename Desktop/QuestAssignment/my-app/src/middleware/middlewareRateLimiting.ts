@@ -3,7 +3,8 @@ const windowMs = 60000;
 const maxRequests = 10; 
 
 export async function rateLimitMiddleware(request:Request) {
-  let ip = request['headers'].get("x-forwarded-for") || request['headers'].get("cf-connecting-ip") || request['headers'].get("cf-ipcountry") ;
+  let ip = request['headers'].get("x-forwarded-for") || request['headers'].get("cf-connecting-ip") 
+  || request['headers'].get("cf-ipcountry") ;
 
 
   if (ip && ip.includes(",")) {

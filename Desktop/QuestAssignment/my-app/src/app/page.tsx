@@ -93,7 +93,7 @@ export default function Home() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Enter your name" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display userName.
@@ -110,7 +110,7 @@ export default function Home() {
             <FormItem>
               <FormLabel>Bio</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Enter you bio" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display Bio.
